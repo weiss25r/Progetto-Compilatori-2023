@@ -1,23 +1,25 @@
 %{
 #include <stdio.h>
+#include "SymbolTables/symboltable.h"
 int errore = 0;
 //#include "SymbolTables/symboltable.h"
 %}
+
 %token GGMM AA BEG_LIB BEG_PRES WS QUOTES LEFT_PAR RIGHT_PAR COLON CODE NAME SEP ARROW TITLE DOT SEMICOLON
 %start input
 %%
-input: data BEG_LIB biblioteca {printf("INPUT OK");}
+input: data BEG_LIB biblioteca BEG_PRES {
+}
 ;
-data: GGMM SEP GGMM SEP AA {printf("DATA OK");}
+data: GGMM SEP GGMM SEP AA {printf("%d\n", $1);}
 ;
-biblioteca: scrittore ARROW WS lista_libri {printf("OK BIBLIOTECA");}
+biblioteca: scrittore ARROW WS lista_libri SEP SEP SEP biblioteca {printf("BIBLIOTECA OK ");}
+|
 ;
-scrittore: NAME WS NAME {printf("SCRITTORE OK");}
+scrittore: NAME WS NAME {}
 ;
-lista_libri: libro lista_libri 
-| libro
-;
-libro: TITLE DOT WS CODE SEMICOLON {printf("LIBRO OK");}
+lista_libri: TITLE DOT WS CODE SEMICOLON WS lista_libri {}
+| 
 ;
 %%
 int main()
