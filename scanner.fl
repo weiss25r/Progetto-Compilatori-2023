@@ -1,4 +1,5 @@
 %{
+#include <string.h>
 #include "parser.tab.h"
 %}
 DIGIT [0-9]
@@ -10,8 +11,8 @@ code [0-9]{3}-[0-9]{5}[A-Z]{2}
 quote \"
 %option noyywrap
 %%
-{GGMM} {yylval = atoi(yytext);return(GGMM); }
-{AA} {return(AA);}
+{GGMM} {yylval.str = strdup(yytext);return(GGMM); }
+{AA} {yylval.str = strdup(yytext);return(AA);}
 "%%" {return(BEG_LIB);}
 "!!" {return(BEG_PRES);}
 " " {return(WS);}
@@ -19,11 +20,11 @@ quote \"
 "(" {return(LEFT_PAR);}
 ")" {return(RIGHT_PAR);}
 ":" {return(COLON);}
-{name} {return(NAME);}
-{quote}[a-zA-Z0-9 ]+{quote} {return(TITLE);}
+{name} {yylval.str = strdup(yytext);return(NAME);}
+{quote}[a-zA-Z0-9 ]+{quote} {yylval.str = strdup(yytext); return(TITLE);}
 "." {return(DOT);}
 ";" {return(SEMICOLON);}
-{code} {return(CODE);}
+{code} {yylval.str = strdup(yytext);return(CODE);}
 "->" {;return(ARROW);}
 "-" {return(SEP);}
 {ws} ;

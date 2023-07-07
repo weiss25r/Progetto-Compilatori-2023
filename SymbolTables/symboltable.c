@@ -25,7 +25,7 @@ LibroNode *lookup(char *codice) {
     return list;
 }
 
-int insert(char *titolo, char *codice) {
+int insert(char *titolo, char *codice, char *autore) {
     LibroNode **list = &(hashTable[hash(codice)]);
 
     LibroNode *prev = NULL;
@@ -55,18 +55,9 @@ int insert(char *titolo, char *codice) {
     book->prestito = NULL;
     book->inPrestito = 0;
     node->next = NULL;
+    book->autore = malloc((strlen(autore) + 1) * sizeof(char));
+    strcpy(book->autore, autore);
 
-    return 0;
-}
-
-int aggiungiAutore(char *codice, char *autore) {
-    LibroNode *list = lookup(codice);
-
-    if (list == NULL)
-        return -1;
-
-    list->info->autore = malloc((strlen(autore) + 1) * sizeof(char));
-    strcpy(list->info->autore, autore);
     return 0;
 }
 
@@ -120,6 +111,7 @@ void freeBook(Libro *book) {
 }
 
 void printAvaiableBooks() {
+    printf("\n--LIBRI DISPONIBILI--\n");
     for (int i = 0; i < HASHSIZE; ++i) {
         if(hashTable[i] != NULL) {
             LibroNode *tmp = hashTable[i];

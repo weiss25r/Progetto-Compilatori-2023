@@ -24,8 +24,7 @@ typedef struct LibroNode {
 
 unsigned int hash(char *codice);
 LibroNode *lookup(char *codice);
-int insert(char *titolo, char *codice);
-int aggiungiAutore(char *codice, char *autore);
+int insert(char *titolo, char *codice, char *autore);
 int aggiungiPrestito(char *codice, char *data);
 void freeHashTable();
 void freeList(LibroNode *list);
