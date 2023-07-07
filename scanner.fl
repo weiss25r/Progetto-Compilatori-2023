@@ -1,0 +1,31 @@
+%{
+#include "parser.tab.h"
+%}
+DIGIT [0-9]
+GGMM {DIGIT}{2}
+AA {DIGIT}{4}
+ws [\t\n]+
+name [a-zA-Z]+
+title \"[a-zA-Z ]\"+
+code [0-9]+
+quote \"
+%option noyywrap
+%%
+{GGMM} {return(GGMM); }
+{AA} {return(AA);}
+"%%" {return(BEG_LIB);}
+"!!" {return(BEG_PRES);}
+" " {return(WS);}
+{quote} {return(QUOTES);}
+"(" {return(LEFT_PAR);}
+")" {return(RIGHT_PAR);}
+":" {return(COLON);}
+{name} {printf("NAME");return(NAME);}
+{quote}[a-zA-Z0-9 ]+{quote} {printf("TITLE");return(TITLE);}
+"." {return(DOT);}
+";" {return(SEMICOLON);}
+{code} {return(CODE);}
+"->" {printf("Arrow");return(ARROW);}
+"-" {return(SEP);}
+{ws} ;
+. ;

@@ -1,0 +1,19 @@
+input -> data%%listaLibri!!prestiti
+
+data -> GG-MM-AA
+GG-> number number
+MM -> number number
+AA -> number number number number
+number -> [0-9]
+
+listalibri -> scrittore-->libri listalibri | ---
+scrittore -> parola WS parola;
+parola -> [a-zA-Z0-9]+
+
+libri -> libro libri | libro
+libro -> "parola".codice; | eps
+codice -> digits-digitsparola
+
+prestiti -> "parola" - parola(lista_prestiti) prestiti | eps
+lista_prestiti -> prestito lista_prestiti | prestito
+prestito -> codice: data;
