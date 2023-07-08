@@ -30,5 +30,5 @@ int addLoan(char *bookCode, char *date);
 void freeHashTable();
 void freeList(BookNode *list);
 void freeBook(Book *book);
-void printAvailableBooks();
-void printLoanedBooks();
+void printAvailableBooks(FILE *stream);
+void printLoanedBooks(FILE *stream);

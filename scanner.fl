@@ -7,7 +7,7 @@ GGMM {DIGIT}{2}
 AA {DIGIT}{4}
 ws [\t\n]+
 name [A-z][a-z]+
-code [0-9]{3}-[0-9]{5}[A-Z]{2}
+book_code [0-9]{3}-[0-9]{5}[A-Z]{2}
 quote \"
 cf [A-Z0-9]{16}
 %option noyywrap
@@ -17,15 +17,14 @@ cf [A-Z0-9]{16}
 "%%" {return(BEG_LIB);}
 "!!" {return(BEG_PRES);}
 " " {return(WS);}
-{quote} {return(QUOTES);}
 "(" {return(LEFT_PAR);}
 ")" {return(RIGHT_PAR);}
 ":" {return(COLON);}
 {name} {yylval.str = strdup(yytext);return(NAME);}
-{quote}[a-zA-Z0-9 ]+{quote} {yylval.str = strdup(yytext); return(TITLE);}
+{quote}[a-zA-Z0-9 ]+{quote} {yylval.str = strdup(yytext); return(Q_NAME);}
 "." {return(DOT);}
 ";" {return(SEMICOLON);}
-{code} {yylval.str = strdup(yytext);return(CODE);}
+{book_code} {yylval.str = strdup(yytext);return(BOOK_CODE);}
 "->" {return(ARROW);}
 "-" {return(SEP);}
 {cf} {return(CF);}

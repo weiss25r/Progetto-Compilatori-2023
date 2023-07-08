@@ -15,12 +15,12 @@
     char *str;
 }
 
-%token GGMM AA BEG_LIB BEG_PRES WS QUOTES LEFT_PAR RIGHT_PAR COLON CODE NAME SEP ARROW TITLE DOT SEMICOLON CF SLASH
+%token GGMM AA BEG_LIB BEG_PRES WS LEFT_PAR RIGHT_PAR COLON BOOK_CODE NAME SEP ARROW Q_NAME DOT SEMICOLON CF SLASH
 %type <str> GGMM;
 %type <str> AA;
 %type <str> NAME;
-%type <str> TITLE;
-%type <str> CODE;
+%type <str> Q_NAME;
+%type <str> BOOK_CODE;
 
 %start input
 %%
@@ -41,7 +41,7 @@ scrittore: NAME WS NAME {
     autore = strcat(autore, $3);
 }
 ;
-lista_libri: TITLE DOT WS CODE SEMICOLON WS lista_libri {
+lista_libri: Q_NAME DOT WS BOOK_CODE SEMICOLON WS lista_libri {
     ++$1;
     char libro[strlen($1)];
     strncpy(libro, $1, strlen($1)-1);
@@ -54,9 +54,9 @@ lista_libri: TITLE DOT WS CODE SEMICOLON WS lista_libri {
 lista_prestiti: utente LEFT_PAR prestiti_utente RIGHT_PAR lista_prestiti
 |
 ;
-utente: TITLE WS SEP WS CF WS
+utente: Q_NAME WS SEP WS CF WS
 ;
-prestiti_utente: CODE COLON WS data_prestito SEMICOLON prestiti_utente {
+prestiti_utente: BOOK_CODE COLON WS data_prestito SEMICOLON prestiti_utente {
     char *d = stackPop();
     addLoan($1, d);
     free(d);
@@ -83,11 +83,12 @@ data_prestito: GGMM SLASH GGMM SLASH AA {
 %%
 int main(int argc, char *argv[])
 {
-    if(--argc == 0) {
-        puts("Utilizzo: ./biblioteca path_file.txt");
+    if(--argc <= 1) {
+        puts("Utilizzo: ./biblioteca input.txt output.txt");
         return -1;
     }
     yyin = fopen(argv[1], "r");
+    FILE *out = fopen(argv[2], "w");
     yyparse();
 
     if(errore) {
@@ -95,10 +96,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    printf("Il file è formattato correttamente\n");
-    printAvailableBooks();
-    printLoanedBooks();
+    printAvailableBooks(out);
+    printLoanedBooks(out);
     freeHashTable();
+    fclose(out);
+    puts("File di output correttamente");
+    return 0;
 }
 
 int yyerror (char *s) /* Gestisce la presenza di errori sintattici */

@@ -108,14 +108,14 @@ void freeBook(Book *book) {
     free(book);
 }
 
-void printAvailableBooks() {
-    printf("\n--LIBRI DISPONIBILI--\n");
+void printAvailableBooks(FILE *stream) {
+    fprintf(stream, "--LIBRI DISPONIBILI--\n");
     for (int i = 0; i < HASHSIZE; ++i) {
         if(hashTable[i] != NULL) {
             BookNode *tmp = hashTable[i];
             while(tmp != NULL) {
                 if(!tmp->info->loan) {
-                    printf("(%s).%s\n", tmp->info->title, tmp->info->author != NULL ? tmp->info->author : "");
+                    fprintf(stream, "(%s).%s\n", tmp->info->title, tmp->info->author != NULL ? tmp->info->author : "");
                 }
                 tmp = tmp->next;
             }
@@ -123,14 +123,14 @@ void printAvailableBooks() {
     }
 }
 
-void printLoanedBooks() {
-    printf("\n--LIBRI IN PRESTITO--\n");
+void printLoanedBooks(FILE *stream) {
+    fprintf(stream, "\n--LIBRI IN PRESTITO--\n");
     for (int i = 0; i < HASHSIZE; ++i) {
         if(hashTable[i] != NULL) {
             BookNode *tmp = hashTable[i];
             while(tmp != NULL) {
                 if(tmp->info->loaned) {
-                    printf("%s: %s\n", tmp->info->title, tmp->info->loan->loanDate);
+                    fprintf(stream, "%s: %s\n", tmp->info->title, tmp->info->loan->loanDate);
                 }
                 tmp = tmp->next;
             }
