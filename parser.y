@@ -2,7 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    #include "SymbolTables/symboltable.h"
+    #include "SymbolTable/symboltable.h"
     #include "StringsStack/stack.h"
     extern int yylex();
     extern int yyerror();
@@ -58,7 +58,7 @@ utente: TITLE WS SEP WS CF WS
 ;
 prestiti_utente: CODE COLON WS data_prestito SEMICOLON prestiti_utente {
     char *d = stackPop();
-    aggiungiPrestito($1, d);
+    addLoan($1, d);
     free(d);
 }
 | WS prestiti_utente
@@ -72,7 +72,7 @@ data_prestito: GGMM SLASH GGMM SLASH AA {
     data = strcat(data, $3);
     data = strcat(data, "/");
     data = strcat(data, $5);
-    
+
     if(!(gg >= 0 && gg<=31 && mm>=0 && mm <=12)) {
         printf("ERRORE: la data del prestito %s non è corretta\n", data);
         exit(-1);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     }
 
     printf("Il file è formattato correttamente\n");
-    printAvaiableBooks();
+    printAvailableBooks();
     printLoanedBooks();
     freeHashTable();
 }
