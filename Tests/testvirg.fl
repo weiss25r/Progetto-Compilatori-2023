@@ -1,0 +1,6 @@
+quote \" 
+%option main
+%%
+\/ {printf("x");}
+. ;
+%%

@@ -6,13 +6,13 @@ DIGIT [0-9]
 GGMM {DIGIT}{2}
 AA {DIGIT}{4}
 ws [\t\n]+
-name [a-zA-Z]+
+name [A-z][a-z]+
 code [0-9]{3}-[0-9]{5}[A-Z]{2}
 quote \"
 cf [A-Z0-9]{16}
 %option noyywrap
 %%
-{GGMM} {printf("GGMM ");yylval.str = strdup(yytext);return(GGMM); }
+{GGMM} {yylval.str = strdup(yytext);return(GGMM); }
 {AA} {yylval.str = strdup(yytext);return(AA);}
 "%%" {return(BEG_LIB);}
 "!!" {return(BEG_PRES);}
@@ -28,7 +28,7 @@ cf [A-Z0-9]{16}
 {code} {yylval.str = strdup(yytext);return(CODE);}
 "->" {return(ARROW);}
 "-" {return(SEP);}
-{cf} {printf("CF ok "); return(CF);}
-\/ {printf("SLASH "); return(SLASH);}
+{cf} {return(CF);}
+\/ {return(SLASH);}
 {ws} ;
 . ;

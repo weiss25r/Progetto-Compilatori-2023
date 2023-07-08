@@ -1,7 +1,7 @@
 #include "symboltable.h"
 #include <string.h>
 
-LibroNode *hashTable[HASHSIZE];
+static LibroNode *hashTable[HASHSIZE];
 
 unsigned int hash(char *codice) {
     if (codice == NULL)
@@ -27,7 +27,6 @@ LibroNode *lookup(char *codice) {
 
 int insert(char *titolo, char *codice, char *autore) {
     LibroNode **list = &(hashTable[hash(codice)]);
-
     LibroNode *prev = NULL;
 
     while (*list != NULL) {
