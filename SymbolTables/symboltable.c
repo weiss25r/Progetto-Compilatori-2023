@@ -126,12 +126,13 @@ void printAvaiableBooks() {
 }
 
 void printLoanedBooks() {
+    printf("\n--LIBRI IN PRESTITO--\n");
     for (int i = 0; i < HASHSIZE; ++i) {
         if(hashTable[i] != NULL) {
             LibroNode *tmp = hashTable[i];
             while(tmp != NULL) {
                 if(tmp->info->inPrestito) {
-                    printf("%s: %s", tmp->info->titolo, tmp->info->prestito->data);
+                    printf("%s: %s\n", tmp->info->titolo, tmp->info->prestito->data);
                 }
                 tmp = tmp->next;
             }

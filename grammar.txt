@@ -6,11 +6,11 @@ MM -> number number
 AA -> number number number number
 number -> [0-9]
 
-listalibri -> scrittore-->libri listalibri | ---
+biblioteca -> scrittore-->lista_libri --- biblioteca | ---
 scrittore -> parola WS parola;
 parola -> [a-zA-Z0-9]+
 
-libri -> libro libri | libro
+lista_libri -> libro lista_libri | libro
 libro -> "parola".codice; | eps
 codice -> digits-digitsparola
 
