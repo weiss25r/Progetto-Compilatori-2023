@@ -36,9 +36,10 @@ biblioteca: scrittore ARROW WS lista_libri SEP SEP SEP biblioteca
     }
 }
 ;
-scrittore: NAME WS NAME {
-    autore = strcat($1, " ");
-    autore = strcat(autore, $3);
+scrittore: NAME {
+    if(autore != NULL) free(autore);
+    autore = malloc(sizeof(char*)*(strlen($1)+1));
+    strcpy(autore, $1);
 }
 ;
 lista_libri: Q_NAME DOT WS BOOK_CODE SEMICOLON WS lista_libri {
@@ -92,15 +93,20 @@ int main(int argc, char *argv[])
     yyparse();
 
     if(errore) {
+        if(autore != NULL) free(autore);
         freeHashTable();
         return -1;
     }
 
     printAvailableBooks(out);
     printLoanedBooks(out);
-    freeHashTable();
     fclose(out);
-    puts("File di output correttamente");
+    freeHashTable();
+
+    if(autore != NULL)
+        free(autore);
+        
+    puts("File di output creato correttamente");
     return 0;
 }
 

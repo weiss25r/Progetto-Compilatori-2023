@@ -6,7 +6,7 @@ DIGIT [0-9]
 GGMM {DIGIT}{2}
 AA {DIGIT}{4}
 ws [\t\n]+
-name [A-z][a-z]+
+name ([A-z][a-z]*[ ]?){2,}
 book_code [0-9]{3}-[0-9]{5}[A-Z]{2}
 quote \"
 cf [A-Z0-9]{16}
