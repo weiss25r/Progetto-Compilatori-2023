@@ -3,17 +3,12 @@
 #include <stdbool.h>
 #define HASHSIZE 101
 
-typedef struct {
-    char *bookCode;
-    char *loanDate;
-}Loan;
-
 struct Book{
     char *author;
     char *title;
     char *bookCode;
     bool loaned;
-    Loan *loan;
+    char *loanDate;
 };
 
 typedef struct Book Book;

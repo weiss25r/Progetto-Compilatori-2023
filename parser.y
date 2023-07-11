@@ -26,7 +26,15 @@
 %%
 input: data BEG_LIB biblioteca BEG_PRES lista_prestiti
 ;
-data: GGMM SEP GGMM SEP AA
+data: GGMM SEP GGMM SEP AA {
+    int gg = atoi($1);
+    int mm = atoi($3);
+
+    if(!(gg >= 0 && gg<=31 && mm>=0 && mm <=12)) {
+        printf("ERRORE: la data odierna non è corretta\n");
+        exit(-1);
+    }
+}
 ;
 biblioteca: scrittore ARROW WS lista_libri SEP SEP SEP biblioteca
 | {
@@ -89,6 +97,12 @@ int main(int argc, char *argv[])
         return -1;
     }
     yyin = fopen(argv[1], "r");
+
+    if(yyin == NULL) {
+        puts("Il file specificato non esiste");
+        return -1;
+    }
+
     FILE *out = fopen(argv[2], "w");
     yyparse();
 

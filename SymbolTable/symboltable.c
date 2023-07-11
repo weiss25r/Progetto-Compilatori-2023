@@ -51,7 +51,7 @@ int insert(char *title, char *bookCode, char *author) {
     strcpy(book->title, title);
     strcpy(book->bookCode, bookCode);
     book->author = NULL;
-    book->loan = NULL;
+    book->loanDate = NULL;
     book->loaned = 0;
     node->next = NULL;
     book->author = malloc((strlen(author) + 1) * sizeof(char));
@@ -67,12 +67,8 @@ int addLoan(char *bookCode, char *date) {
         return -1;
 
     list->info->loaned = 1;
-    list->info->loan = malloc(sizeof(Loan));
-    Loan *p = list->info->loan;
-    p->loanDate = malloc(sizeof(char) * (strlen(date) + 1));
-    p->bookCode = malloc(sizeof(char) * (strlen(bookCode) + 1));
-    strcpy(p->bookCode, bookCode);
-    strcpy(p->loanDate, date);
+    list->info->loanDate = malloc(sizeof(char) * (strlen(date) + 1));
+    strcpy(list->info->loanDate, date);
     return 0;
 }
 
@@ -100,9 +96,7 @@ void freeBook(Book *book) {
     free(book->bookCode);
 
     if (book->loaned) {
-        free(book->loan->bookCode);
-        free(book->loan->loanDate);
-        free(book->loan);
+        free(book->loanDate);
     }
 
     free(book);
@@ -114,7 +108,7 @@ void printAvailableBooks(FILE *stream) {
         if(hashTable[i] != NULL) {
             BookNode *tmp = hashTable[i];
             while(tmp != NULL) {
-                if(!tmp->info->loan) {
+                if(tmp->info->loanDate == NULL) {
                     fprintf(stream, "(%s).%s\n", tmp->info->title, tmp->info->author != NULL ? tmp->info->author : "");
                 }
                 tmp = tmp->next;
@@ -129,8 +123,8 @@ void printLoanedBooks(FILE *stream) {
         if(hashTable[i] != NULL) {
             BookNode *tmp = hashTable[i];
             while(tmp != NULL) {
-                if(tmp->info->loaned) {
-                    fprintf(stream, "%s: %s\n", tmp->info->title, tmp->info->loan->loanDate);
+                if(tmp->info->loanDate != NULL) {
+                    fprintf(stream, "%s: %s\n", tmp->info->title, tmp->info->loanDate);
                 }
                 tmp = tmp->next;
             }
